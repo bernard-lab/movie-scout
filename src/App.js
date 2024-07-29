@@ -1,25 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { FaSearch } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
-function App() {
+import MovieCard from "./components/MovieCard";
+
+const apiKey = process.env.REACT_APP_API_KEY;
+const apiUrl = process.env.REACT_APP_API_URL;
+
+const API_URL = `${apiUrl}${apiKey}`;
+
+const App = () => {
+  const [movies, setMovies] = useState([]);
+  const [searchTitle, setSearchTitle] = useState([]);
+
+  const searchMovies = async (title) => {
+    const response = await fetch(`${API_URL}&s=${title}`);
+    const data = await response.json();
+
+    setMovies(data.Search);
+  };
+
+  useEffect(() => {
+    searchMovies("alpha");
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1>Movie Scout</h1>
+      <div className="search">
+        <input
+          type="text"
+          value={searchTitle}
+          placeholder="Search for movies"
+          onChange={(e) => setSearchTitle(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") searchMovies(searchTitle);
+          }}
+          required
+        />
+        <FaSearch
+          className="text-lg text-[#ff512f] cursor-pointer hover:text-[#dd2476]"
+          onClick={() => searchMovies(searchTitle)}
+        />
+      </div>
+
+      <div className="container">
+        {movies !== undefined && movies.length > 0 ? (
+          movies.map((movie) => <MovieCard film={movie} />)
+        ) : (
+          <div className="empty">
+            <h2>No Movies found</h2>
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
 
 export default App;
