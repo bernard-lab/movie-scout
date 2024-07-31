@@ -43,7 +43,7 @@ const App = () => {
 
       <div className="container">
         {movies !== undefined && movies.length > 0 ? (
-          movies.map((movie) => <MovieCard film={movie} />)
+          movies.map((movie) => <MovieCard key={movie.imdbID} film={movie} />)
         ) : (
           <div className="empty">
             <h2>No Movies found</h2>
