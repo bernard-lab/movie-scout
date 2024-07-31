@@ -4,17 +4,14 @@ import { useEffect, useState } from "react";
 
 import MovieCard from "./components/MovieCard";
 
-const apiKey = process.env.REACT_APP_API_KEY;
 const apiUrl = process.env.REACT_APP_API_URL;
-
-const API_URL = `${apiUrl}${apiKey}`;
 
 const App = () => {
   const [movies, setMovies] = useState([]);
   const [searchTitle, setSearchTitle] = useState([]);
 
   const searchMovies = async (title) => {
-    const response = await fetch(`${API_URL}&s=${title}`);
+    const response = await fetch(`${apiUrl}&s=${title}`);
     const data = await response.json();
 
     setMovies(data.Search);
